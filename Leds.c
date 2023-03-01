@@ -7,6 +7,7 @@
 
 
 #include "mcc_generated_files/mcc.h"
+#include "spi1.h"
 
 uint8_t blue = 0x00, green = 0x00, red = 0xFF;
 
