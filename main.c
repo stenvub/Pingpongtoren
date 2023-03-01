@@ -43,7 +43,6 @@ void main(void) {
     ADC_StartConversion();
     TMR2_Initialize();
     TMR2_StartTimer();
-    int tel = 0;
     
     printf("Hello :) \r\n");
 
@@ -56,24 +55,11 @@ void main(void) {
             TMR0_Initialize();
 
             PI();
-            
-            tel++;
-            
-            if ( tel == 30 ) {
-                ADC_SelectChannel(Potentiometer);
-                ADC_StartConversion();
-                PI_SetSetpoint(ADC_GetConversion(Potentiometer) >> 2);
-                tel = 0;
-            }
-                      
             static uint8_t printCycle = 0; //door static toe te voegen wordt "printCycle" niet elke keer her geinitialiseerd maar behoudt het zijn vorige waarde
             if (printCycle++ > 30) {
                 printLogs();
                 printCycle = 0;
             }
-            
-            ADC_SelectChannel(Hoogtesensor);
-            ADC_StartConversion();
         }
     }
 }

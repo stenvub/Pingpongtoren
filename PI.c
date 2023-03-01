@@ -11,7 +11,7 @@
  */
 
 static uint8_t sensorHeight = 0;
-static uint8_t setpoint = 160; 
+static uint8_t setpoint = 120;
 static int error = 0;
 static float integral = 0;
 static float ki = 0.004;
@@ -19,9 +19,10 @@ static float kp = 2;
 static int dutycycle;
 static float P;
 static float I;
+static int MeterValue;
 
 uint8_t PI_GetSensorHeight(void) {
-    return sensorHeight;
+    return sensorHeight;  //Input van de 
 }
 
 void PI_SetSetpoint(uint8_t value) {
@@ -74,7 +75,8 @@ void PI(void) {
     {
         dutycycle = 0;
     }
-
+    
+    
             
 
     PWM5_LoadDutyValue( (uint16_t) dutycycle); // output pwm signaal voor hoogte 10 bit (van 0 tot 0x3FF)

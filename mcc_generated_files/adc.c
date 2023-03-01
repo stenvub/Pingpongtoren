@@ -58,7 +58,7 @@
 
 #define ACQ_US_DELAY 5
 
-void (*ADC_InterruptHandler)(void);
+void (*ADC_InterruptHandler)(void); 
 
 /**
   Section: ADC Module APIs
