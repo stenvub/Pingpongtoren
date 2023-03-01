@@ -42,9 +42,7 @@ void Send_LED_EndFrame() {
     }
 }
 
-void main(void) {
-    // initialize the device
-    SYSTEM_Initialize();
+int main(void) {
     
     while (1) {
         switch (direction) {
@@ -113,6 +111,7 @@ void main(void) {
         //stop frame
         Send_LED_EndFrame();
         __delay_ms(50);
+        
     }
 }
 

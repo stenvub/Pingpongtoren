@@ -51,12 +51,13 @@ void SYSTEM_Initialize(void)
 {
 
     PMD_Initialize();
+    SPI1_Initialize();
     PIN_MANAGER_Initialize();
     OSCILLATOR_Initialize();
     WDT_Initialize();
     ADC_Initialize();
-    PWM5_Initialize();
     TMR2_Initialize();
+    PWM5_Initialize();
     TMR0_Initialize();
     EUSART_Initialize();
 }
