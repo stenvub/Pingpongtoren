@@ -52,6 +52,7 @@ float PI_GetKi(void) {
 }
 
 void PI(void) {
+    printf("pi ok \r\n");
     sensorHeight = (uint8_t) (ADC_GetConversionResult() >> 2); //resultaat van ADC (8 bit )
 
     //Hier dient jullie code toegevoegd te worden
@@ -78,7 +79,7 @@ void PI(void) {
     
     
             
-
+    printf("duty: %d/n/r", dutycycle);
     PWM5_LoadDutyValue( (uint16_t) dutycycle); // output pwm signaal voor hoogte 10 bit (van 0 tot 0x3FF)
 }
 

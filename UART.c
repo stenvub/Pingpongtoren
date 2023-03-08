@@ -198,17 +198,17 @@ void uartHandler(void) {
     place = 1;
 
     /* Input hexadecimal number from user */
-    /*printf("Enter any hexadecimal number: ");
+    /* printf("Enter any hexadecimal number: ");
     gets(hex);
 
     /* Find the length of total number of hex digit */
-    /*len = strlen(hex);
+    /* len = strlen(hex);
     len--;
 
     /*
      * Iterate over each hex digit
      */
-    /*for(i=0; hex[i]!='\0'; i++)
+    /* for(i=0; hex[i]!='\0'; i++)
     {
  
         /* Find the decimal representation of hex[i] */
