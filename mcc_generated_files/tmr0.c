@@ -112,10 +112,10 @@ void TMR0_Reload(uint8_t periodVal)
 }
 
 bool TMR0_HasOverflowOccured(void)
-{ printf("timer bezig \r\n");
+{
     // check if  overflow has occurred by checking the TMRIF bit
     return(PIR0bits.TMR0IF);
-    printf("bool afgewerkt \r\n");
+    
 }
 /**
   End of File

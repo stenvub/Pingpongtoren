@@ -41,7 +41,9 @@ void Send_LED_Frame(uint8_t intensity, uint8_t blue, uint8_t green, uint8_t red)
 
 void Send_LED_StartFrame() {
     for (int i = 0; i < 4; i++) {
+        //printf("sendled ok \r\n");
         SPI1_ExchangeByte(0x00);
+        //printf("exchange byte ok \r\n");
     }
 }
 
@@ -51,6 +53,24 @@ void Send_LED_EndFrame() {
     }
 }
 
+void Led_Follow(uint8_t inputhoogte){
+    //float inputhoogtereal;
+    Send_LED_StartFrame();
+    
+        for (char led = 0; led < NumberOfLEDs; led++) {
+            float inputhoogtereal = inputhoogte*60.0/185.0;
+            if (inputhoogtereal >20 && inputhoogtereal< 40){
+                inputhoogtereal = (inputhoogtereal-5);
+            }
+            if (led <= inputhoogtereal) {
+                Send_LED_Frame(0x1F, blue, green, red);
+            } else {
+                Send_LED_Frame(0x00, 0x00, 0x00, 0x00);
+            }
+        }
+            Send_LED_EndFrame();
+
+}
 /*
                          Main application
  */
@@ -74,22 +94,20 @@ void main(void) {
     //INTERRUPT_PeripheralInterruptDisable();
 
     // Initialiseer de hoogtemeting
+
+    TMR0_StartTimer();
+    TMR2_StartTimer();
+   
     ADC_SelectChannel(Hoogtesensor);
     ADC_StartConversion();
-    TMR2_Initialize();
-    TMR2_StartTimer();
-    
-    printf("Hello :) \r\n");
+            SPI1_Open(0);
 
+    printf("start");
     while (1) {
 
         uartHandler();
-        printf("while ok \r\n");
         // PI moet op een vaste frequentie (elke 33ms) lopen voor de integrator
         if (TMR0_HasOverflowOccured()) {
-            TMR0_Initialize();
-            printf("timer ok \r\n");
-
             PI();
             static uint8_t printCycle = 0; //door static toe te voegen wordt "printCycle" niet elke keer her geinitialiseerd maar behoudt het zijn vorige waarde
             if (printCycle++ > 30) {
@@ -97,7 +115,8 @@ void main(void) {
                 printCycle = 0;
           }
         }
-        printf("timer geskipt \r\n");
+                Led_Follow(PI_GetSensorHeight());
+
         switch (direction) {
             case UP: if (led_run < NumberOfLEDs - 1) {
                     led_run++;
@@ -153,21 +172,24 @@ void main(void) {
         }
 
         //start frame
-        Send_LED_StartFrame();
-        for (char led = 0; led < NumberOfLEDs; led++) {
-            if (led <= led_run) {
+
+        //Send_LED_StartFrame();
+ /*       for (char led = 0; led < NumberOfLEDs; led++) {
+            if (led <= void PI_GetSensorHeight()) {
                 Send_LED_Frame(0x1F, blue, green, red);
             } else {
                 Send_LED_Frame(0x00, 0x00, 0x00, 0x00);
             }
-        }
-        //stop frame
-        Send_LED_EndFrame();
-        printf("while gedaan \r\n");
+        }*/
+         //stop frame
+
+//        __delay_ms(50);
+        //Led_Follow(void PI_GetSensorHeight());
 
         
     }
-    
+            SPI1_Close();
+
 }
 
 /**

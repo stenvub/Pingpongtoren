@@ -11,11 +11,11 @@
  */
 
 static uint8_t sensorHeight = 0;
-static uint8_t setpoint = 120;
+static uint8_t setpoint = 150;
 static int error = 0;
 static float integral = 0;
-static float ki = 0.004;
-static float kp = 2;
+static float ki = 0;
+static float kp = 7;
 static int dutycycle;
 static float P;
 static float I;
@@ -28,6 +28,7 @@ uint8_t PI_GetSensorHeight(void) {
 void PI_SetSetpoint(uint8_t value) {
     setpoint = value;
 }
+
 uint8_t PI_GetSetPoint(void) {
     return setpoint;
 }
@@ -52,14 +53,13 @@ float PI_GetKi(void) {
 }
 
 void PI(void) {
-    printf("pi ok \r\n");
     sensorHeight = (uint8_t) (ADC_GetConversionResult() >> 2); //resultaat van ADC (8 bit )
 
     //Hier dient jullie code toegevoegd te worden
     // error = ...
     // dutycycle = ...
     error = setpoint - sensorHeight;
-    
+    printf("height: %d/n/r", sensorHeight);
     P = kp * error;
     
     integral += error;
@@ -79,7 +79,7 @@ void PI(void) {
     
     
             
-    printf("duty: %d/n/r", dutycycle);
+    //printf("duty: %d/n/r", dutycycle);
     PWM5_LoadDutyValue( (uint16_t) dutycycle); // output pwm signaal voor hoogte 10 bit (van 0 tot 0x3FF)
 }
 
