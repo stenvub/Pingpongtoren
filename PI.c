@@ -11,11 +11,11 @@
  */
 
 static uint8_t sensorHeight = 0;
-static uint8_t setpoint = 150;
+static uint8_t setpoint = 250;
 static int error = 0;
 static float integral = 0;
 static float ki = 0;
-static float kp = 7;
+static float kp = 5;
 static int dutycycle;
 static float P;
 static float I;
