@@ -17,13 +17,7 @@
 #include "UART.h"
 #include "spi1.h"
 
-uint8_t blue = 0x00, green = 0x00, red = 0xFF;
-
-enum states {
-    GREEN_UP, RED_DOWN, BLUE_UP, GREEN_DOWN, RED_UP, BLUE_DOWN
-};
-enum states change_color = GREEN_UP;
-uint8_t step = 1;
+uint8_t blue = 0x00, green = 0xFF, red = 0x00;
 
 enum count {
     UP, DOWN
@@ -55,81 +49,55 @@ void Send_LED_EndFrame() {
 
 void Led_Follow(uint8_t inputhoogte){
     Send_LED_StartFrame();
+
     float inputhoogtereal = inputhoogte * 60.0 / 185.0;
-    if (inputhoogtereal > 20 && inputhoogtereal < 40){
-        inputhoogtereal = (inputhoogtereal - 5);
-    }
-    uint8_t intensity = 0x1F;
-    uint8_t last_led_on = (uint8_t)inputhoogtereal;
-    if (last_led_on < 1) last_led_on = 1;
+    int last_led = 0;
+    //if (inputhoogtereal > 20 && inputhoogtereal < 40){
+        //inputhoogtereal = (inputhoogtereal - 5);
+    //}
     for (char led = 0; led < NumberOfLEDs; led++) {
-        if (led <= last_led_on) {
-            Send_LED_Frame(intensity, blue, green, red);
+        if (led <= inputhoogtereal) {
+            Send_LED_Frame(0x1F, blue, green, red);
+            last_led = led;
         } else {
             Send_LED_Frame(0x00, 0x00, 0x00, 0x00);
         }
-        if (led == last_led_on) {
-            intensity = 0x0F;
-        }
     }
+
+    // Set the color based on the number of LEDs turned on
+    int num_leds_on = last_led + 1;
+    if (num_leds_on <= 30) {
+        // Green to yellow
+        green = 0xFF;
+        red = num_leds_on * 0xFF / 30;
+    } else {
+        // Yellow to red
+        green = (60 - num_leds_on) * 0xFF / 30;
+        red = 0xFF;
+    }
+
     Send_LED_EndFrame();
 }
 
 void Led_program(){
     switch (direction) {
-            case UP: if (led_run < NumberOfLEDs - 1) {
-                    led_run++;
-                } else {
-                    direction = DOWN;
-                }
-                break;
-            case DOWN: if (led_run > 0) {
-                    led_run--;
-                } else {
-                    direction = UP;
-                }
-                break;
-        }
-
-        switch (change_color) {
-            case GREEN_UP: if (green < 0xFF) {
-                    green += step;
-                } else {
-                    change_color = RED_DOWN;
-                }
-                break;
-            case RED_DOWN: if (red > 0x00) {
-                    red -= step;
-                } else {
-                    change_color = BLUE_UP;
-                }
-                break;
-            case BLUE_UP: if (blue < 0xFF) {
-                    blue += step;
-                } else {
-                    change_color = GREEN_DOWN;
-                }
-                break;
-            case GREEN_DOWN: if (green > 0x00) {
-                    green -= step;
-                } else {
-                    change_color = RED_UP;
-                }
-                break;
-            case RED_UP: if (red < 0xFF) {
-                    red += step;
-                } else {
-                    change_color = BLUE_DOWN;
-                }
-                break;
-            case BLUE_DOWN: if (blue > 0x00) {
-                    blue -= step;
-                } else {
-                    change_color = GREEN_UP;
-                }
-                break;
-        }
+        case UP:
+            if (led_run < NumberOfLEDs - 1) {
+                led_run++;
+            } else {
+                direction = DOWN;
+            }
+            break;
+        case DOWN:
+            if (led_run > 0) {
+                led_run--;
+            } else {
+                direction = UP;
+            }
+            break;
+    }
 }
+
 /*
                          Main application
  */

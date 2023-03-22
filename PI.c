@@ -11,7 +11,7 @@
  */
 
 static uint8_t sensorHeight = 0;
-static uint8_t setpoint = 250;
+static uint8_t setpoint = 200;
 static int error = 0;
 static float integral = 0;
 static float ki = 0;
